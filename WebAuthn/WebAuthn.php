@@ -300,7 +300,9 @@ class WebAuthn
 
         /* cross check origin */
         $origin = parse_url($info->response->clientData->origin);
-        if ($this->appid != $origin['host']) {
+        $appid = $this->appid;
+        $host = $origin['host'];
+        if (!substr_compare($host, $appid, strlen($host)-strlen($appid), strlen($appid)) === 0) {
             $this->oops("origin mismatch '{$info->response->clientData->origin}'");
         }
 

@@ -44,7 +44,8 @@ function webauthnRegister(key, callback){
 			if (key.b64challenge != cd.challenge) {
 				callback(false, 'key returned something unexpected (1)');
 			}
-			if ('https://'+key.publicKey.rp.name != cd.origin) {
+			var appid = key.publicKey.rp.name;
+			if (cd.origin.indexOf(appid, cd.origin.length-appid.length) === -1) {
 				return callback(false, 'key returned something unexpected (2)');
 			}
 			if (! ('type' in cd)) {
