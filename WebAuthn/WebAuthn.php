@@ -223,24 +223,17 @@ class WebAuthn
     */
     public function prepareForLogin($userwebauthn)
     {
-        $allow = (object)array();
-        $allow->type = 'public-key';
-        $allow->transports = array('usb','nfc','ble','internal');
-        $allow->id = null;
         $allows = array();
         if (! empty($userwebauthn)) {
+            $allow = (object)array();
+            $allow->type = 'public-key';
+            $allow->transports = array('usb','nfc','ble','internal');
+            $allow->id = null;
+
             foreach (json_decode($userwebauthn) as $key) {
                 $allow->id = $key->id;
                 $allows[] = clone $allow;
             }
-        } else {
-            /* including empty user, so they can't tell whether the user exists or not (need same result each
-            time for each user) */
-            // log("fabricating key");
-            $allow->id = array();
-            $rb = md5((string)time());
-            $allow->id = self::stringToArray($rb);
-            $allows[] = clone $allow;
         }
 
         /* generate key request */
