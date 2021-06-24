@@ -243,7 +243,6 @@ class WebAuthn
         $publickey->allowCredentials = $allows;
         $publickey->userVerification = 'discouraged';
         $publickey->extensions = (object)array();
-        $publickey->extensions->txAuthSimple = 'Execute order 66';
         $publickey->rpId = str_replace('https://', '', $this->appid);
 
         return json_encode($publickey);
