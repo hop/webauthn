@@ -75,7 +75,7 @@ class WebAuthn
     *               this computer, but with any available authentication device, e.g. known to Windows Hello)
     * @return string pass this JSON string back to the browser
     */
-  public function prepareChallengeForRegistration($username, $userid, $crossPlatform=FALSE)
+  public function prepareChallengeForRegistration($username, $userid, $crossPlatform=FALSE, $requireResidentKey=FALSE)
     {
         $result = (object)array();
         $rbchallenge = self::randomBytes(16);
@@ -101,7 +101,7 @@ class WebAuthn
         $result->authenticatorSelection = (object)array();
         if ($crossPlatform) { $result->authenticatorSelection->authenticatorAttachment = 'cross-platform'; }
 
-        $result->authenticatorSelection->requireResidentKey = false;
+        $result->authenticatorSelection->requireResidentKey = $requireResidentKey;
         $result->authenticatorSelection->userVerification = 'discouraged';
 
         $result->attestation = null;
