@@ -75,13 +75,14 @@ class WebAuthn
     *               this computer, but with any available authentication device, e.g. known to Windows Hello)
     * @return string pass this JSON string back to the browser
     */
-  public function prepareChallengeForRegistration($username, $userid, $crossPlatform=FALSE, $requireResidentKey=FALSE)
+  public function prepareChallengeForRegistration($username, $displayName, $userid, $crossPlatform=FALSE, $requireResidentKey=FALSE)
     {
         $result = (object)array();
         $rbchallenge = self::randomBytes(16);
         $result->challenge = self::stringToArray($rbchallenge);
         $result->user = (object)array();
-        $result->user->name = $result->user->displayName = $username;
+        $result->user->name = $username;
+        $result->user->displayName = $displayName;
         $result->user->id = self::stringToArray($userid);
 
         $result->rp = (object)array();
