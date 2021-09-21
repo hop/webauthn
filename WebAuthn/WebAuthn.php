@@ -220,9 +220,10 @@ class WebAuthn
     * generates a new key string for the physical key, fingerprint
     * reader or whatever to respond to on login
     * @param string $userwebauthn the existing webauthn field for the user from your database
+    * @param string $mychallenge data to be signed XXX: should this be salted?
     * @return string to pass to javascript webauthnAuthenticate
     */
-    public function prepareForLogin($userwebauthn)
+    public function prepareForLogin($userwebauthn, $challenge='')
     {
         $allows = array();
         if (! empty($userwebauthn)) {
@@ -237,9 +238,14 @@ class WebAuthn
             }
         }
 
+        if ($challenge === '')
+        {
+            $challenge = self::stringToArray(self::randomBytes(16));
+        }
+
         /* generate key request */
         $publickey = (object)array();
-        $publickey->challenge = self::stringToArray(self::randomBytes(16));
+        $publickey->challenge = $challenge;
         $publickey->timeout = 60000;
         $publickey->allowCredentials = $allows;
         $publickey->userVerification = 'discouraged';
